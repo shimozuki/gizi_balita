@@ -1,0 +1,3 @@
+ALTER TABLE balita
+ADD COLUMN lila DECIMAL(5,2) AFTER imt,
+ADD COLUMN lingkar_kepala DECIMAL(5,2) AFTER lila;
