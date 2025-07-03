@@ -37,7 +37,7 @@ class KaderController extends Controller
             'posyandu' => $request->posyandu,
         ]);
 
-        return redirect()->route('pages.kader.index')->with('success', 'Kader berhasil ditambahkan.');
+        return redirect()->route('kader.index')->with('success', 'Kader berhasil ditambahkan.');
     }
 
     public function edit($id)
@@ -70,6 +70,6 @@ class KaderController extends Controller
         $kader = AppUser::findOrFail($id);
         $kader->delete();
 
-        return redirect()->route('pages.kader.index')->with('success', 'Kader berhasil dihapus.');
+        return redirect()->route('kader.index')->with('success', 'Kader berhasil dihapus.');
     }
 }
