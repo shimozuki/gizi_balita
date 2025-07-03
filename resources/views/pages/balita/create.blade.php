@@ -9,63 +9,73 @@
 @endpush
 
 @section('content')
-    <div class="content-wrapper">
-        <div class="content-header">
-            <div class="container-fluid">
-            </div>
+<div class="content-wrapper">
+    <div class="content-header">
+        <div class="container-fluid">
         </div>
-        <section class="content">
-            <div class="container-fluid">
-                <div class="row">
-                    <div class="col-sm-1"></div>
-                    <div class="col-sm-10">
-                        <div class="card card-primary">
-                            <div class="card-header">
-                                <h3 class="card-title">Tambah Data Balita</h3>
-                            </div>
-                            <!-- /.card-header -->
-                            <div class="card-body">
-                                <form action="{{ url('/balita') }}" method="POST">
-                                    @csrf
-                                    <h5 mt-3>Data Balita</h5>
-                                    <div class="form-group">
-                                        <label>Nama Balita</label>
-                                        <select name="id_balita" class="form-control select2">
-                                            <option disabled selected>Pilih Nama Balita</option>
-                                            @foreach($orangtua as $balita)
-                                            <option value="{{ $balita->id }}">{{ $balita->nama_balita }}</option>
-                                            @endforeach
-                                        </select>
+    </div>
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-sm-1"></div>
+                <div class="col-sm-10">
+                    <div class="card card-primary">
+                        <div class="card-header">
+                            <h3 class="card-title">Tambah Data Balita</h3>
+                        </div>
+                        <!-- /.card-header -->
+                        <div class="card-body">
+                            <form action="{{ url('/balita') }}" method="POST">
+                                @csrf
+                                <h5 mt-3>Data Balita</h5>
+                                <div class="form-group">
+                                    <label>Nama Balita</label>
+                                    <select name="id_balita" class="form-control select2">
+                                        <option disabled selected>Pilih Nama Balita</option>
+                                        @foreach($orangtua as $balita)
+                                        <option value="{{ $balita->id }}">{{ $balita->nama_balita }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-4">
+                                        <label>Umur (bulan)</label>
+                                        <input type="number" name="umur" class="form-control" required>
                                     </div>
-                                    <div class="row">
-                                        <div class="col-sm-4">
-                                            <label>Umur (bulan)</label>
-                                            <input type="number" name="umur" class="form-control" required>
-                                        </div>
-                                        <div class="col-sm-4">
-                                            <label>Berat Badan (Kg)</label>
-                                            <input type="number" step="any" name="berat_badan" class="form-control" required>
-                                        </div>
-                                        <div class="col-sm-4">
-                                            <label>Tinggi Badan (cm)</label>
-                                            <input type="number" step="any" name="tinggi_badan" class="form-control" required>
-                                        </div>
+                                    <div class="col-sm-4">
+                                        <label>Berat Badan (Kg)</label>
+                                        <input type="number" step="any" name="berat_badan" class="form-control" required>
                                     </div>
-                                    <br>
-                                    <a href="/balita" class="btn btn-primary">Kembali</a>
-                                    <button type="submit" class="btn btn-success btn-fill pull-right">Simpan</button>
-                                </form>
-                            </div>
-                            <!-- /.card-body -->
+                                    <div class="col-sm-4">
+                                        <label>Tinggi Badan (cm)</label>
+                                        <input type="number" step="any" name="tinggi_badan" class="form-control" required>
+                                    </div>
+                                </div>
+                                <div class="row mt-3">
+                                    <div class="col-sm-6">
+                                        <label>LILA (cm)</label>
+                                        <input type="number" step="any" name="lila" class="form-control">
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <label>Lingkar Kepala (cm)</label>
+                                        <input type="number" step="any" name="lingkar_kepala" class="form-control">
+                                    </div>
+                                </div>
+                                <br>
+                                <a href="/balita" class="btn btn-primary">Kembali</a>
+                                <button type="submit" class="btn btn-success btn-fill pull-right">Simpan</button>
+                            </form>
                         </div>
                         <!-- /.card-body -->
                     </div>
+                    <!-- /.card-body -->
                 </div>
-                <div class="col-sm-1"></div>
             </div>
-    </div>
-    </section>
-    </div>
+            <div class="col-sm-1"></div>
+        </div>
+</div>
+</section>
+</div>
 
 @endsection
 @push('addon-script')

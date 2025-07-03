@@ -346,6 +346,8 @@ class BalitaController extends Controller
         $balita->bobot_bbtb = $data['bobot_bbtb'];
         $balita->status_imtu = $data['status_imtu'];
         $balita->bobot_imtu = $data['bobot_imtu'];
+        $balita->lila = $request->lila;
+        $balita->lingkar_kepala = $request->lingkar_kepala;
         $balita->save();
 
         Alert::success('Data Berhasil Diubah');

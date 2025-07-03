@@ -71,8 +71,9 @@
                                                     <th rowspan="2">Posyandu</th>
                                                     <th class="text-center" rowspan="2">Berat Badan (Kg)</th>
                                                     <th class="text-center" rowspan="2">Tinggi Badan (cm)</th>
-                                                    <th class="text-center" rowspan="2">IMT (Kg/m²)</th>
-                                                    <th class="text-center" colspan="4">Nilai Antropometri</th>
+                                                    <th class="text-center" rowspan="2">LILA (cm)</th>
+                                                    <th class="text-center" rowspan="2">Lingkar Kepala (cm)</th>
+                                                    <th class="text-center" colspan="3">Nilai Antropometri</th>
                                                     @if(auth()->user()->level == 'kader')
                                                     <th rowspan="2" class="text-right">Action</th>
                                                     @endif
@@ -81,7 +82,6 @@
                                                     <th class="text-center">TB /U</th>
                                                     <th class="text-center">BB /U</th>
                                                     <th class="text-center">BB /TB</th>
-                                                    <th class="text-center">IMT /U</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -94,11 +94,11 @@
                                                     <td class="text-center">{{ $data->orangtua->posyandu }}</td>
                                                     <td class=" text-center">{{ $data->berat_badan }}</td>
                                                     <td class="text-center">{{ $data->tinggi_badan }}</td>
-                                                    <td class="text-center">{{ $data->imt }}</td>
+                                                    <td class="text-center">{{ $data->lila }}</td>
+                                                    <td class="text-center">{{ $data->lingkar_kepala }}</td>
                                                     <td class="text-center">{{ $data->tbu }}<br><small>{{ $data->status_tbu }}</small></td>
                                                     <td class="text-center">{{ $data->bbu }}<br><small>{{ $data->status_bbu }}</small></td>
                                                     <td class="text-center">{{ $data->bbtb }}<br><small>{{ $data->status_bbtb }}</small></td>
-                                                    <td class="text-center">{{ $data->imtu }}<br><small>{{ $data->status_imtu }}</small></td>
                                                     @if(auth()->user()->level == 'kader')
                                                     <td class="text-right">
                                                         <a href="{{ route('balita.edit', $data->id) }}" class="btn btn-warning btn-sm"><i class="fas fa-edit"></i></a>
