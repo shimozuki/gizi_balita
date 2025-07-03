@@ -17,18 +17,25 @@ class OrangtuaController extends Controller
      */
     public function index()
     {
-        if(auth()->user()->level == 'orangtua') {
-            // $balita = Balita::with('orangtua.user')->where('id', '=', auth()->user()->id);
-            $orangtua = Orangtua::whereHas('user', function($query) {
-                return $query->where('name', '=', auth()->user()->name);
-            })->get();
-        }
-        else {
-            $orangtua = Orangtua::with('user')->get();
+        $user = auth()->user();
+
+        if ($user->level === 'orangtua') {
+            $orangtua = Orangtua::whereHas('user', function ($query) use ($user) {
+                return $query->where('name', $user->name);
+            })->get()->groupBy('posyandu');
+        } elseif ($user->level === 'kader') {
+            $orangtua = Orangtua::with('user')
+                ->where('posyandu', $user->posyandu)
+                ->get()
+                ->groupBy('posyandu');
+        } else { // admin
+            $orangtua = Orangtua::with('user')->get()->groupBy('posyandu');
         }
 
         return view('pages.orangtua.index', compact('orangtua'));
     }
+
+
 
     /**
      * Show the form for creating a new resource.
@@ -54,7 +61,7 @@ class OrangtuaController extends Controller
             'level' => 'orangtua',
             'password' => $request->password
         ]);
-        
+
         $input = $request->except(['email', 'password', 'nama_ayah']);
 
         Orangtua::create(array_merge($input, ['id_user' => $user->id]));
@@ -62,7 +69,6 @@ class OrangtuaController extends Controller
         Alert::success('Berhasil', 'Data Berhasil Ditambahkan');
 
         return redirect('/orangtua');
-
     }
 
     /**
@@ -113,7 +119,6 @@ class OrangtuaController extends Controller
         Alert::success('Berhasil', 'Data Berhasil Diperbarui');
 
         return redirect('/orangtua');
-
     }
 
     /**
@@ -127,7 +132,7 @@ class OrangtuaController extends Controller
         $orangtua = Orangtua::with('user')->find($id);
         $user = User::where('id', $orangtua->id_user)->delete();
         $orangtua->delete();
-        
+
 
         Alert::success('Berhasil', 'Data Orang Tua Berhasil Dihapus');
 

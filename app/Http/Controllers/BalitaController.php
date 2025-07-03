@@ -23,18 +23,39 @@ class BalitaController extends Controller
      */
     public function index()
     {
-        if(auth()->user()->level == 'orangtua') {
-            // $balita = Balita::with('orangtua.user')->where('id', '=', auth()->user()->id);
-            $balita = Balita::whereHas('orangtua.user', function($query) {
-                return $query->where('name', '=', auth()->user()->name);
-            })->get();
-        }
-        else {
-            $balita = Balita::with('orangtua')->get();
-        }
+        $user = auth()->user();
 
-        return view('pages.balita.index', compact('balita'));
+        if ($user->level == 'orangtua') {
+            $balita = Balita::whereHas('orangtua.user', function ($query) use ($user) {
+                return $query->where('name', $user->name);
+            })->get();
+
+            return view('pages.balita.index', [
+                'balitaPerPosyandu' => ['Posyandu Saya' => $balita]
+            ]);
+        } elseif ($user->level == 'kader') {
+            $posyandu = $user->posyandu;
+
+            $balita = Balita::whereHas('orangtua', function ($query) use ($posyandu) {
+                return $query->where('posyandu', $posyandu);
+            })->get();
+
+            return view('pages.balita.index', [
+                'balitaPerPosyandu' => [$posyandu => $balita]
+            ]);
+        } else { // admin
+            $balita = Balita::with('orangtua')->get();
+
+            // Kelompokkan berdasarkan posyandu
+            $balitaPerPosyandu = $balita->groupBy(function ($item) {
+                return $item->orangtua->posyandu ?? 'Lainnya';
+            });
+
+            return view('pages.balita.index', compact('balitaPerPosyandu'));
+        }
     }
+
+
 
     /**
      * Show the form for creating a new resource.
@@ -58,8 +79,8 @@ class BalitaController extends Controller
     {
 
         $data = $request->all();
-        
-        $imt = $request->berat_badan / pow(($request->tinggi_badan / 100) , 2);       // rumus index massa tubuh, dibagi 100 untuk konversi ke satuan meter
+
+        $imt = $request->berat_badan / pow(($request->tinggi_badan / 100), 2);       // rumus index massa tubuh, dibagi 100 untuk konversi ke satuan meter
         $data['id_balita'] = $request->id_balita;
         $data['imt'] = $imt;
 
@@ -70,110 +91,94 @@ class BalitaController extends Controller
 
 
         //tinggi badan berdasarkan umur
-        if($request->tinggi_badan >= $dtTBU->median) {
+        if ($request->tinggi_badan >= $dtTBU->median) {
             $data['tbu'] = ($request->tinggi_badan - $dtTBU->median) / ($dtTBU->plus1sd - $dtTBU->median);
-        }
-        else if($request->tinggi_badan <= $dtTBU->median) {
+        } else if ($request->tinggi_badan <= $dtTBU->median) {
             $data['tbu'] = ($request->tinggi_badan - $dtTBU->median) / ($dtTBU->median - $dtTBU->min1sd);
         }
 
         //berat badan berdasarkan umur
-        if($request->berat_badan >= $dtBBU->median) {
+        if ($request->berat_badan >= $dtBBU->median) {
             $data['bbu'] = ($request->berat_badan - $dtBBU->median) / ($dtBBU->plus1sd - $dtBBU->median);
-        }
-        else if($request->berat_badan <= $dtBBU->median) {
+        } else if ($request->berat_badan <= $dtBBU->median) {
             $data['bbu'] = ($request->berat_badan - $dtBBU->median) / ($dtBBU->median - $dtBBU->min1sd);
-        }  
+        }
 
         //berat badan berdasarkan tinggi badan
-        if($request->berat_badan >= $dtBBTB->median) {
+        if ($request->berat_badan >= $dtBBTB->median) {
             $data['bbtb'] = ($request->berat_badan - $dtBBTB->median) / ($dtBBTB->plus1sd - $dtBBTB->median);
-        }
-        else if($request->berat_badan <= $dtBBTB->median) {
+        } else if ($request->berat_badan <= $dtBBTB->median) {
             $data['bbtb'] = ($request->berat_badan - $dtBBTB->median) / ($dtBBTB->median - $dtBBTB->min1sd);
         }
 
         //indeks massa tubuh beradasarkan umur
-        if($imt >= $dtIMTU->median) {
+        if ($imt >= $dtIMTU->median) {
             $data['imtu'] = ($imt - $dtIMTU->median) / ($dtIMTU->plus1sd - $dtIMTU->median);
-        }
-        else if($imt <= $dtIMTU->median) {
+        } else if ($imt <= $dtIMTU->median) {
             $data['imtu'] = ($imt - $dtIMTU->median) / ($dtIMTU->median - $dtIMTU->min1sd);
         }
 
         // kategori status gizi -> tinggi badan berdasarkan umur
-        if($data['tbu'] < -3) {
+        if ($data['tbu'] < -3) {
             $data['status_tbu'] = "Sangat Pendek";
             $data['bobot_tbu'] = 0.25;
-        }
-        else if(($data['tbu'] >= -3) && ($data['tbu'] < -2)) {
+        } else if (($data['tbu'] >= -3) && ($data['tbu'] < -2)) {
             $data['status_tbu'] = "Pendek";
             $data['bobot_tbu'] = 0.5;
-        }
-        else if(($data['tbu'] >= -2) && ($data['tbu'] < 1)) {
+        } else if (($data['tbu'] >= -2) && ($data['tbu'] < 1)) {
             $data['status_tbu'] = "Normal";
             $data['bobot_tbu'] = 0.75;
-        }
-        else {
+        } else {
             $data['status_tbu'] = "Tinggi";
             $data['bobot_tbu'] = 1;
         }
 
         // kategori status gizi -> berat badan beradasarkan umur
-        if($data['bbu'] < -3) {
+        if ($data['bbu'] < -3) {
             $data['status_bbu'] = "Sangat Kurang";
             $data['bobot_bbu'] = 0.25;
-        }
-        else if(($data['bbu'] >= -3) && ($data['bbu'] < -2)) {
+        } else if (($data['bbu'] >= -3) && ($data['bbu'] < -2)) {
             $data['status_bbu'] = "Kurang";
             $data['bobot_bbu'] = 0.5;
-        }
-        else if(($data['bbu'] >= -2) && ($data['bbu'] < 1)) {
+        } else if (($data['bbu'] >= -2) && ($data['bbu'] < 1)) {
             $data['status_bbu'] = "Normal";
             $data['bobot_bbu'] = 0.75;
-        }
-        else {
+        } else {
             $data['status_bbu'] = "Lebih";
             $data['bobot_bbu'] = 1;
         }
 
         // kategori status gizi -> berat badan berdasarkan tinggi badan
-        if($data['bbtb'] < -3) {
+        if ($data['bbtb'] < -3) {
             $data['status_bbtb'] = "Sangat Kurus";
             $data['bobot_bbtb'] = 0.25;
-        }
-        else if(($data['bbtb'] >= -3) && ($data['bbtb'] < -2)) {
+        } else if (($data['bbtb'] >= -3) && ($data['bbtb'] < -2)) {
             $data['status_bbtb'] = "Kurus";
             $data['bobot_bbtb'] = 0.5;
-        }
-        else if(($data['bbtb'] >= -2) && ($data['bbtb'] < 1)) {
+        } else if (($data['bbtb'] >= -2) && ($data['bbtb'] < 1)) {
             $data['status_bbtb'] = "Normal";
             $data['bobot_bbtb'] = 0.75;
-        }
-        else {
+        } else {
             $data['status_bbtb'] = "Gemuk";
             $data['bobot_bbtb'] = 1;
         }
 
         // kategori status gizi -> indeks massa tubuh berdasarkan umur
-        if($data['imtu'] < -3) {
+        if ($data['imtu'] < -3) {
             $data['status_imtu'] = "Sangat Kurus";
             $data['bobot_imtu'] = 0.25;
-        }
-        else if(($data['imtu'] >= -3) && ($data['imtu'] < -2)) {
+        } else if (($data['imtu'] >= -3) && ($data['imtu'] < -2)) {
             $data['status_imtu'] = "Kurus";
             $data['bobot_imtu'] = 0.5;
-        }
-        else if(($data['imtu'] >= -2) && ($data['imtu'] < 1)) {
+        } else if (($data['imtu'] >= -2) && ($data['imtu'] < 1)) {
             $data['status_imtu'] = "Normal";
             $data['bobot_imtu'] = 0.75;
-        }
-        else {
+        } else {
             $data['status_imtu'] = "Gemuk";
             $data['bobot_imtu'] = 1;
         }
 
-        
+
 
         Balita::create($data);
 
@@ -192,7 +197,7 @@ class BalitaController extends Controller
 
         //     return redirect('/balita');
         // }
-        
+
     }
 
     /**
@@ -229,7 +234,7 @@ class BalitaController extends Controller
     public function update(Request $request, $id)
     {
         $data = $request->all();
-        $imt = $request->berat_badan / pow(($request->tinggi_badan / 100) , 2);
+        $imt = $request->berat_badan / pow(($request->tinggi_badan / 100), 2);
 
         $dtBBU = BBU::where('umur', $request->umur)->first();                         // berat badan berdasarkan umur
         $dtTBU = TBU::where('umur', $request->umur)->first();                         // tinggi badan berdasarkan umur
@@ -237,105 +242,89 @@ class BalitaController extends Controller
         $dtIMTU = IMTU::where('umur', $request->umur)->first();                       // index massa tubuh berdasarkan umur
 
         //tinggi badan berdasarkan umur
-        if($request->tinggi_badan >= $dtTBU->median) {
+        if ($request->tinggi_badan >= $dtTBU->median) {
             $data['tbu'] = ($request->tinggi_badan - $dtTBU->median) / ($dtTBU->plus1sd - $dtTBU->median);
-        }
-        else if($request->tinggi_badan <= $dtTBU->median) {
+        } else if ($request->tinggi_badan <= $dtTBU->median) {
             $data['tbu'] = ($request->tinggi_badan - $dtTBU->median) / ($dtTBU->median - $dtTBU->min1sd);
         }
 
         //berat badan berdasarkan umur
-        if($request->berat_badan >= $dtBBU->median) {
+        if ($request->berat_badan >= $dtBBU->median) {
             $data['bbu'] = ($request->berat_badan - $dtBBU->median) / ($dtBBU->plus1sd - $dtBBU->median);
-        }
-        else if($request->berat_badan <= $dtBBU->median) {
+        } else if ($request->berat_badan <= $dtBBU->median) {
             $data['bbu'] = ($request->berat_badan - $dtBBU->median) / ($dtBBU->median - $dtBBU->min1sd);
-        }  
+        }
 
         //berat badan berdasarkan tinggi badan
-        if($request->berat_badan >= $dtBBTB->median) {
+        if ($request->berat_badan >= $dtBBTB->median) {
             $data['bbtb'] = ($request->berat_badan - $dtBBTB->median) / ($dtBBTB->plus1sd - $dtBBTB->median);
-        }
-        else if($request->berat_badan <= $dtBBTB->median) {
+        } else if ($request->berat_badan <= $dtBBTB->median) {
             $data['bbtb'] = ($request->berat_badan - $dtBBTB->median) / ($dtBBTB->median - $dtBBTB->min1sd);
         }
 
         //indeks massa tubuh beradasarkan umur
-        if($imt >= $dtIMTU->median) {
+        if ($imt >= $dtIMTU->median) {
             $data['imtu'] = ($imt - $dtIMTU->median) / ($dtIMTU->plus1sd - $dtIMTU->median);
-        }
-        else if($imt <= $dtIMTU->median) {
+        } else if ($imt <= $dtIMTU->median) {
             $data['imtu'] = ($imt - $dtIMTU->median) / ($dtIMTU->median - $dtIMTU->min1sd);
         }
 
         // kategori status gizi -> tinggi badan berdasarkan umur
-        if($data['tbu'] < -3) {
+        if ($data['tbu'] < -3) {
             $data['status_tbu'] = "Sangat Pendek";
             $data['bobot_tbu'] = 0.25;
-        }
-        else if(($data['tbu'] >= -3) && ($data['tbu'] < -2)) {
+        } else if (($data['tbu'] >= -3) && ($data['tbu'] < -2)) {
             $data['status_tbu'] = "Pendek";
             $data['bobot_tbu'] = 0.5;
-        }
-        else if(($data['tbu'] >= -2) && ($data['tbu'] < 1)) {
+        } else if (($data['tbu'] >= -2) && ($data['tbu'] < 1)) {
             $data['status_tbu'] = "Normal";
             $data['bobot_tbu'] = 0.75;
-        }
-        else {
+        } else {
             $data['status_tbu'] = "Tinggi";
             $data['bobot_tbu'] = 1;
         }
 
         // kategori status gizi -> berat badan beradasarkan umur
-        if($data['bbu'] < -3) {
+        if ($data['bbu'] < -3) {
             $data['status_bbu'] = "Sangat Kurang";
             $data['bobot_bbu'] = 0.25;
-        }
-        else if(($data['bbu'] >= -3) && ($data['bbu'] < -2)) {
+        } else if (($data['bbu'] >= -3) && ($data['bbu'] < -2)) {
             $data['status_bbu'] = "Kurang";
             $data['bobot_bbu'] = 0.5;
-        }
-        else if(($data['bbu'] >= -2) && ($data['bbu'] < 1)) {
+        } else if (($data['bbu'] >= -2) && ($data['bbu'] < 1)) {
             $data['status_bbu'] = "Normal";
             $data['bobot_bbu'] = 0.75;
-        }
-        else {
+        } else {
             $data['status_bbu'] = "Lebih";
             $data['bobot_bbu'] = 1;
         }
 
         // kategori status gizi -> berat badan berdasarkan tinggi badan
-        if($data['bbtb'] < -3) {
+        if ($data['bbtb'] < -3) {
             $data['status_bbtb'] = "Sangat Kurus";
             $data['bobot_bbtb'] = 0.25;
-        }
-        else if(($data['bbtb'] >= -3) && ($data['bbtb'] < -2)) {
+        } else if (($data['bbtb'] >= -3) && ($data['bbtb'] < -2)) {
             $data['status_bbtb'] = "Kurus";
             $data['bobot_bbtb'] = 0.5;
-        }
-        else if(($data['bbtb'] >= -2) && ($data['bbtb'] < 1)) {
+        } else if (($data['bbtb'] >= -2) && ($data['bbtb'] < 1)) {
             $data['status_bbtb'] = "Normal";
             $data['bobot_bbtb'] = 0.75;
-        }
-        else {
+        } else {
             $data['status_bbtb'] = "Gemuk";
             $data['bobot_bbtb'] = 1;
         }
 
         // kategori status gizi -> indeks massa tubuh berdasarkan umur
-        if($data['imtu'] < -3) {
+        if ($data['imtu'] < -3) {
             $data['status_imtu'] = "Sangat Kurus";
             $data['bobot_imtu'] = 0.25;
-        }
-        else if(($data['imtu'] >= -3) && ($data['imtu'] < -2)) {
+        } else if (($data['imtu'] >= -3) && ($data['imtu'] < -2)) {
             $data['status_imtu'] = "Kurus";
             $data['bobot_imtu'] = 0.5;
-        }
-        else if(($data['imtu'] >= -2) && ($data['imtu'] < 1)) {
+        } else if (($data['imtu'] >= -2) && ($data['imtu'] < 1)) {
             $data['status_imtu'] = "Normal";
             $data['bobot_imtu'] = 0.75;
-        }
-        else {
+        } else {
             $data['status_imtu'] = "Gemuk";
             $data['bobot_imtu'] = 1;
         }
