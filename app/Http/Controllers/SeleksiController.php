@@ -37,7 +37,7 @@ class SeleksiController extends Controller
 
     public function preferensiSAW(Request $request)
     {
-        $balita = Balita::with('orangtua')->where('id_balita', '=', $request->id_balita)->first(); // ambil seluruh data di tabel balita
+        $balita = Balita::with('orangtua')->where('id', '=', $request->id_balita)->first(); // ambil seluruh data di tabel balita
 
         // data bobot kriteria
         $c1 = 0.25;
