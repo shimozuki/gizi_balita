@@ -44,16 +44,18 @@ class SeleksiController extends Controller
         $c2 = 0.25;
         $c3 = 0.25;
         $c4 = 0.25;
+        $c5 = 0.25;
 
         // normalisasi matriks
-        $max = max($balita->bobot_tbu, $balita->bobot_bbu, $balita->bobot_bbtb, $balita->bobot_imtu);
+        $max = max($balita->bobot_tbu, $balita->bobot_bbu, $balita->bobot_bbtb, $balita->bobot_lila, $balita->bobot_lingkarkepala);
         $normal_tbu = round($balita->bobot_tbu / $max, 2);
         $normal_bbu = round($balita->bobot_bbu / $max, 2);
         $normal_bbtb = round($balita->bobot_bbtb / $max, 2);
-        $normal_imtu = round($balita->bobot_imtu / $max, 2);
+        $normal_lila = round($balita->bobot_lila / $max, 2);
+        $normal_lingkarkepala = round($balita->bobot_lingkarkepala / $max, 2);
 
         // menghitung matriks nilai V
-        $nilaiV = round(($c1 * $normal_tbu) + ($c2 * $normal_bbu) + ($c3 * $normal_bbtb) + ($c4 * $normal_imtu), 2);
+        $nilaiV = round(($c1 * $normal_tbu) + ($c2 * $normal_bbu) + ($c3 * $normal_bbtb) + ($c4 * $normal_lila) + ($c5 * $normal_lingkarkepala), 2);
 
         if ($nilaiV <= 0.25) {
             $statusGizi = 'Gizi Buruk';
@@ -63,7 +65,7 @@ class SeleksiController extends Controller
             $statusGizi = 'Gizi Baik';
         }
 
-        return view('pages.seleksi.index', compact('balita', 'normal_tbu', 'normal_bbu', 'normal_bbtb', 'normal_imtu', 'nilaiV', 'statusGizi'));
+        return view('pages.seleksi.index', compact('balita', 'normal_tbu', 'normal_bbu', 'normal_bbtb', 'normal_lila', 'nilaiV', 'statusGizi', 'normal_lingkarkepala'));
     }
 
     public function rekapanSAW(Request $request)
@@ -83,13 +85,12 @@ class SeleksiController extends Controller
                 continue;
             }
 
-            $c1 = $c2 = $c3 = $c4 = $c5 = $c6 = 1 / 6;
+            $c1 = $c2 = $c3 = $c4 = $c5 = 1 / 6;
             $nilaiV = [];
 
             $maxTBU = $balitas->max('bobot_tbu') ?: 1;
             $maxBBU = $balitas->max('bobot_bbu') ?: 1;
             $maxBBTB = $balitas->max('bobot_bbtb') ?: 1;
-            $maxIMTU = $balitas->max('bobot_imtu') ?: 1;
             $maxLILA = $balitas->max('bobot_lila') ?: 1;
             $maxLKepala = $balitas->max('bobot_lingkarkepala') ?: 1;
 
@@ -99,7 +100,6 @@ class SeleksiController extends Controller
                 $normal_tbu = round($data->bobot_tbu / $maxTBU, 2);
                 $normal_bbu = round($data->bobot_bbu / $maxBBU, 2);
                 $normal_bbtb = round($data->bobot_bbtb / $maxBBTB, 2);
-                $normal_imtu = round($data->bobot_imtu / $maxIMTU, 2);
                 $normal_lila = round($data->bobot_lila / $maxLILA, 2);
                 $normal_lingkarkepala = round($data->bobot_lingkarkepala / $maxLKepala, 2);
 
@@ -107,9 +107,8 @@ class SeleksiController extends Controller
                     $c1 * $normal_tbu +
                         $c2 * $normal_bbu +
                         $c3 * $normal_bbtb +
-                        $c4 * $normal_imtu +
-                        $c5 * $normal_lila +
-                        $c6 * $normal_lingkarkepala,
+                        $c4 * $normal_lila +
+                        $c5 * $normal_lingkarkepala,
                     2
                 );
             }

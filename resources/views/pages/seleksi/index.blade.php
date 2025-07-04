@@ -45,11 +45,13 @@
                                         <th class="text-center">TB/U</th>
                                         <th class="text-center">BB/U</th>
                                         <th class="text-center">BB/TB</th>
-                                        <th class="text-center">IMT/U</th>
+                                        <th class="text-center">LILA</th>
+                                        <th class="text-center">LINGKAR KEPALA</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr>
+                                        <td class="text-center">0.25</td>
                                         <td class="text-center">0.25</td>
                                         <td class="text-center">0.25</td>
                                         <td class="text-center">0.25</td>
@@ -63,13 +65,14 @@
                                 <thead class="thead-dark">
                                     <tr>
                                         <th rowspan="2">Nama Balita</th>
-                                        <th colspan="4" class="text-center">Kriteria</th>
+                                        <th colspan="5" class="text-center">Kriteria</th>
                                     </tr>
                                     <tr>
                                         <th class="text-center">TB /U</th>
                                         <th class="text-center">BB /U</th>
                                         <th class="text-center">BB /TB</th>
-                                        <th class="text-center">IMT /U</th>
+                                        <th class="text-center">LILA</th>
+                                        <th class="text-center">LINGKAR KEPALA</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -91,9 +94,14 @@
                                             <small class="text-muted">{{ $balita->status_bbtb }}</small>
                                         </td>
                                         <td class="text-center">
-                                            {{ $balita->bobot_imtu }}
+                                            {{ $balita->bobot_lila }}
                                             <br>
-                                            <small class="text-muted">{{ $balita->status_imtu }}</small>
+                                            <small class="text-muted">{{ $balita->status_lila }}</small>
+                                        </td>
+                                        <td class="text-center">
+                                            {{ $balita->bobot_lingkarkepala }}
+                                            <br>
+                                            <small class="text-muted">{{ $balita->status_lingkarkepala }}</small>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -104,13 +112,14 @@
                                 <thead class="thead-dark">
                                     <tr>
                                         <th rowspan="2">Nama Balita</th>
-                                        <th colspan="4" class="text-center">Kriteria</th>
+                                        <th colspan="5" class="text-center">Kriteria</th>
                                     </tr>
                                     <tr>
                                         <th class="text-center">TB /U</th>
                                         <th class="text-center">BB /U</th>
                                         <th class="text-center">BB /TB</th>
-                                        <th class="text-center">IMT /U</th>
+                                        <th class="text-center">LILA</th>
+                                        <th class="text-center">LINGKAR KEPALA</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -119,7 +128,8 @@
                                         <td class="text-center">{{ $normal_tbu }}</td>
                                         <td class="text-center">{{ $normal_bbu }}</td>
                                         <td class="text-center">{{ $normal_bbtb }}</td>
-                                        <td class="text-center">{{ $normal_imtu }}</td>
+                                        <td class="text-center">{{ $normal_lila }}</td>
+                                        <td class="text-center">{{ $normal_lingkarkepala }}</td>
                                     </tr>
                                 </tbody>
                             </table>

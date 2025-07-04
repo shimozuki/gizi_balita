@@ -550,6 +550,7 @@ class ComposerStaticInit61f01d18b00b42ec6ffc59ef3878ab5e
         'App\\Http\\Controllers\\Controller' => __DIR__ . '/../..' . '/app/Http/Controllers/Controller.php',
         'App\\Http\\Controllers\\HomeController' => __DIR__ . '/../..' . '/app/Http/Controllers/HomeController.php',
         'App\\Http\\Controllers\\IMTUController' => __DIR__ . '/../..' . '/app/Http/Controllers/IMTUController.php',
+        'App\\Http\\Controllers\\KaderController' => __DIR__ . '/../..' . '/app/Http/Controllers/KaderController.php',
         'App\\Http\\Controllers\\LilaController' => __DIR__ . '/../..' . '/app/Http/Controllers/LilaController.php',
         'App\\Http\\Controllers\\LingkarKepalaController' => __DIR__ . '/../..' . '/app/Http/Controllers/LingkarKepalaController.php',
         'App\\Http\\Controllers\\OrangtuaController' => __DIR__ . '/../..' . '/app/Http/Controllers/OrangtuaController.php',
