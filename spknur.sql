@@ -11,7 +11,7 @@
  Target Server Version : 80030 (8.0.30)
  File Encoding         : 65001
 
- Date: 03/07/2025 17:35:29
+ Date: 06/07/2025 20:59:17
 */
 
 SET NAMES utf8mb4;
@@ -24,33 +24,36 @@ DROP TABLE IF EXISTS `balita`;
 CREATE TABLE `balita`  (
   `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
   `id_balita` bigint UNSIGNED NOT NULL,
-  `posyandu` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `umur` int NOT NULL,
   `tinggi_badan` double(8, 2) NOT NULL,
   `berat_badan` double(8, 2) NOT NULL,
   `imt` double(8, 2) NOT NULL,
+  `lila` decimal(5, 2) NULL DEFAULT NULL,
+  `lingkar_kepala` decimal(5, 2) NULL DEFAULT NULL,
   `tbu` double(8, 2) NOT NULL,
   `bbu` double(8, 2) NOT NULL,
   `bbtb` double(8, 2) NOT NULL,
-  `imtu` double(8, 2) NOT NULL,
   `status_tbu` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `bobot_tbu` double(8, 2) NOT NULL,
   `status_bbu` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `bobot_bbu` double(8, 2) NOT NULL,
   `status_bbtb` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `bobot_bbtb` double(8, 2) NOT NULL,
-  `status_imtu` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `bobot_imtu` double(8, 2) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
+  `status_lila` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
+  `bobot_lila` double(8, 2) NULL DEFAULT NULL,
+  `status_lingkarkepala` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
+  `bobot_lingkarkepala` double(8, 2) NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `id_balita`(`id_balita` ASC) USING BTREE,
   CONSTRAINT `balita_ibfk_1` FOREIGN KEY (`id_balita`) REFERENCES `orangtua` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT
-) ENGINE = InnoDB AUTO_INCREMENT = 112 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 117 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of balita
 -- ----------------------------
+INSERT INTO `balita` VALUES (116, 110, 4, 90.00, 20.00, 24.69, 17.70, 46.00, 12.68, 15.11, 6.25, 'Tinggi', 1.00, 'Lebih', 1.00, 'Gemuk', 1.00, '2025-07-04 00:07:19', '2025-07-04 00:07:19', 'Gemuk', 1.00, 'Tinggi', 1.00);
 
 -- ----------------------------
 -- Table structure for bbtb
@@ -407,12 +410,36 @@ CREATE TABLE `lila`  (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 27 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of lila
 -- ----------------------------
-INSERT INTO `lila` VALUES (1, 1, 3.00, 3.00, 3.00, 3.00, 3.00, 3.00, 3.00, '2025-07-02 15:45:50', '2025-07-02 15:45:50');
+INSERT INTO `lila` VALUES (2, 0, 9.10, 9.80, 10.50, 11.10, 11.80, 12.50, 13.20, '2025-07-04 07:40:28', '2025-07-04 07:40:28');
+INSERT INTO `lila` VALUES (3, 1, 9.50, 10.20, 10.90, 11.60, 12.30, 13.00, 13.70, '2025-07-04 07:40:28', '2025-07-04 07:40:28');
+INSERT INTO `lila` VALUES (4, 2, 9.80, 10.50, 11.20, 11.90, 12.60, 13.30, 14.00, '2025-07-04 07:40:28', '2025-07-04 07:40:28');
+INSERT INTO `lila` VALUES (5, 3, 10.10, 10.80, 11.50, 12.20, 12.90, 13.60, 14.30, '2025-07-04 07:40:28', '2025-07-04 07:40:28');
+INSERT INTO `lila` VALUES (6, 4, 10.30, 11.00, 11.70, 12.40, 13.10, 13.80, 14.50, '2025-07-04 07:40:28', '2025-07-04 07:40:28');
+INSERT INTO `lila` VALUES (7, 5, 10.50, 11.20, 11.90, 12.60, 13.30, 14.00, 14.70, '2025-07-04 07:40:28', '2025-07-04 07:40:28');
+INSERT INTO `lila` VALUES (8, 6, 10.70, 11.40, 12.10, 12.80, 13.50, 14.20, 14.90, '2025-07-04 07:40:28', '2025-07-04 07:40:28');
+INSERT INTO `lila` VALUES (9, 7, 10.90, 11.60, 12.30, 13.00, 13.70, 14.40, 15.10, '2025-07-04 07:40:28', '2025-07-04 07:40:28');
+INSERT INTO `lila` VALUES (10, 8, 11.00, 11.70, 12.40, 13.10, 13.80, 14.50, 15.20, '2025-07-04 07:40:28', '2025-07-04 07:40:28');
+INSERT INTO `lila` VALUES (11, 9, 11.10, 11.80, 12.50, 13.20, 13.90, 14.60, 15.30, '2025-07-04 07:40:28', '2025-07-04 07:40:28');
+INSERT INTO `lila` VALUES (12, 10, 11.20, 11.90, 12.60, 13.30, 14.00, 14.70, 15.40, '2025-07-04 07:40:28', '2025-07-04 07:40:28');
+INSERT INTO `lila` VALUES (13, 11, 11.30, 12.00, 12.70, 13.40, 14.10, 14.80, 15.50, '2025-07-04 07:40:28', '2025-07-04 07:40:28');
+INSERT INTO `lila` VALUES (14, 12, 11.40, 12.10, 12.80, 13.50, 14.20, 14.90, 15.60, '2025-07-04 07:40:28', '2025-07-04 07:40:28');
+INSERT INTO `lila` VALUES (15, 13, 11.50, 12.20, 12.90, 13.60, 14.30, 15.00, 15.70, '2025-07-04 07:40:28', '2025-07-04 07:40:28');
+INSERT INTO `lila` VALUES (16, 14, 11.60, 12.30, 13.00, 13.70, 14.40, 15.10, 15.80, '2025-07-04 07:40:28', '2025-07-04 07:40:28');
+INSERT INTO `lila` VALUES (17, 15, 11.70, 12.40, 13.10, 13.80, 14.50, 15.20, 15.90, '2025-07-04 07:40:28', '2025-07-04 07:40:28');
+INSERT INTO `lila` VALUES (18, 16, 11.80, 12.50, 13.20, 13.90, 14.60, 15.30, 16.00, '2025-07-04 07:40:28', '2025-07-04 07:40:28');
+INSERT INTO `lila` VALUES (19, 17, 11.90, 12.60, 13.30, 14.00, 14.70, 15.40, 16.10, '2025-07-04 07:40:28', '2025-07-04 07:40:28');
+INSERT INTO `lila` VALUES (20, 18, 12.00, 12.70, 13.40, 14.10, 14.80, 15.50, 16.20, '2025-07-04 07:40:28', '2025-07-04 07:40:28');
+INSERT INTO `lila` VALUES (21, 19, 12.10, 12.80, 13.50, 14.20, 14.90, 15.60, 16.30, '2025-07-04 07:40:28', '2025-07-04 07:40:28');
+INSERT INTO `lila` VALUES (22, 20, 12.20, 12.90, 13.60, 14.30, 15.00, 15.70, 16.40, '2025-07-04 07:40:28', '2025-07-04 07:40:28');
+INSERT INTO `lila` VALUES (23, 21, 12.30, 13.00, 13.70, 14.40, 15.10, 15.80, 16.50, '2025-07-04 07:40:28', '2025-07-04 07:40:28');
+INSERT INTO `lila` VALUES (24, 22, 12.40, 13.10, 13.80, 14.50, 15.20, 15.90, 16.60, '2025-07-04 07:40:28', '2025-07-04 07:40:28');
+INSERT INTO `lila` VALUES (25, 23, 12.50, 13.20, 13.90, 14.60, 15.30, 16.00, 16.70, '2025-07-04 07:40:28', '2025-07-04 07:40:28');
+INSERT INTO `lila` VALUES (26, 24, 12.60, 13.30, 14.00, 14.70, 15.40, 16.10, 16.80, '2025-07-04 07:40:28', '2025-07-04 07:40:28');
 
 -- ----------------------------
 -- Table structure for lingkar_kepala
@@ -431,12 +458,36 @@ CREATE TABLE `lingkar_kepala`  (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 27 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of lingkar_kepala
 -- ----------------------------
-INSERT INTO `lingkar_kepala` VALUES (1, 1, 3.00, 3.00, 3.00, 3.00, 3.00, 3.00, 3.00, '2025-07-02 15:51:48', '2025-07-02 15:51:48');
+INSERT INTO `lingkar_kepala` VALUES (2, 0, 30.00, 31.50, 32.50, 33.50, 34.50, 35.50, 36.50, '2025-07-04 07:51:58', '2025-07-04 07:51:58');
+INSERT INTO `lingkar_kepala` VALUES (3, 1, 32.00, 33.00, 34.00, 35.00, 36.00, 37.00, 38.00, '2025-07-04 07:51:58', '2025-07-04 07:51:58');
+INSERT INTO `lingkar_kepala` VALUES (4, 2, 33.00, 34.00, 35.00, 36.00, 37.00, 38.00, 39.00, '2025-07-04 07:51:58', '2025-07-04 07:51:58');
+INSERT INTO `lingkar_kepala` VALUES (5, 3, 34.00, 35.00, 36.00, 37.00, 38.00, 39.00, 40.00, '2025-07-04 07:51:58', '2025-07-04 07:51:58');
+INSERT INTO `lingkar_kepala` VALUES (6, 4, 35.00, 36.00, 37.00, 38.00, 39.00, 40.00, 41.00, '2025-07-04 07:51:58', '2025-07-04 07:51:58');
+INSERT INTO `lingkar_kepala` VALUES (7, 5, 36.00, 37.00, 38.00, 39.00, 40.00, 41.00, 42.00, '2025-07-04 07:51:58', '2025-07-04 07:51:58');
+INSERT INTO `lingkar_kepala` VALUES (8, 6, 37.00, 38.00, 39.00, 40.00, 41.00, 42.00, 43.00, '2025-07-04 07:51:58', '2025-07-04 07:51:58');
+INSERT INTO `lingkar_kepala` VALUES (9, 7, 37.50, 38.50, 39.50, 40.50, 41.50, 42.50, 43.50, '2025-07-04 07:51:58', '2025-07-04 07:51:58');
+INSERT INTO `lingkar_kepala` VALUES (10, 8, 38.00, 39.00, 40.00, 41.00, 42.00, 43.00, 44.00, '2025-07-04 07:51:58', '2025-07-04 07:51:58');
+INSERT INTO `lingkar_kepala` VALUES (11, 9, 38.30, 39.30, 40.30, 41.30, 42.30, 43.30, 44.30, '2025-07-04 07:51:58', '2025-07-04 07:51:58');
+INSERT INTO `lingkar_kepala` VALUES (12, 10, 38.50, 39.50, 40.50, 41.50, 42.50, 43.50, 44.50, '2025-07-04 07:51:58', '2025-07-04 07:51:58');
+INSERT INTO `lingkar_kepala` VALUES (13, 11, 38.80, 39.80, 40.80, 41.80, 42.80, 43.80, 44.80, '2025-07-04 07:51:58', '2025-07-04 07:51:58');
+INSERT INTO `lingkar_kepala` VALUES (14, 12, 39.00, 40.00, 41.00, 42.00, 43.00, 44.00, 45.00, '2025-07-04 07:51:58', '2025-07-04 07:51:58');
+INSERT INTO `lingkar_kepala` VALUES (15, 13, 39.20, 40.20, 41.20, 42.20, 43.20, 44.20, 45.20, '2025-07-04 07:51:58', '2025-07-04 07:51:58');
+INSERT INTO `lingkar_kepala` VALUES (16, 14, 39.40, 40.40, 41.40, 42.40, 43.40, 44.40, 45.40, '2025-07-04 07:51:58', '2025-07-04 07:51:58');
+INSERT INTO `lingkar_kepala` VALUES (17, 15, 39.60, 40.60, 41.60, 42.60, 43.60, 44.60, 45.60, '2025-07-04 07:51:58', '2025-07-04 07:51:58');
+INSERT INTO `lingkar_kepala` VALUES (18, 16, 39.80, 40.80, 41.80, 42.80, 43.80, 44.80, 45.80, '2025-07-04 07:51:58', '2025-07-04 07:51:58');
+INSERT INTO `lingkar_kepala` VALUES (19, 17, 40.00, 41.00, 42.00, 43.00, 44.00, 45.00, 46.00, '2025-07-04 07:51:58', '2025-07-04 07:51:58');
+INSERT INTO `lingkar_kepala` VALUES (20, 18, 40.10, 41.10, 42.10, 43.10, 44.10, 45.10, 46.10, '2025-07-04 07:51:58', '2025-07-04 07:51:58');
+INSERT INTO `lingkar_kepala` VALUES (21, 19, 40.20, 41.20, 42.20, 43.20, 44.20, 45.20, 46.20, '2025-07-04 07:51:58', '2025-07-04 07:51:58');
+INSERT INTO `lingkar_kepala` VALUES (22, 20, 40.30, 41.30, 42.30, 43.30, 44.30, 45.30, 46.30, '2025-07-04 07:51:58', '2025-07-04 07:51:58');
+INSERT INTO `lingkar_kepala` VALUES (23, 21, 40.40, 41.40, 42.40, 43.40, 44.40, 45.40, 46.40, '2025-07-04 07:51:58', '2025-07-04 07:51:58');
+INSERT INTO `lingkar_kepala` VALUES (24, 22, 40.50, 41.50, 42.50, 43.50, 44.50, 45.50, 46.50, '2025-07-04 07:51:58', '2025-07-04 07:51:58');
+INSERT INTO `lingkar_kepala` VALUES (25, 23, 40.60, 41.60, 42.60, 43.60, 44.60, 45.60, 46.60, '2025-07-04 07:51:58', '2025-07-04 07:51:58');
+INSERT INTO `lingkar_kepala` VALUES (26, 24, 40.70, 41.70, 42.70, 43.70, 44.70, 45.70, 46.70, '2025-07-04 07:51:58', '2025-07-04 07:51:58');
 
 -- ----------------------------
 -- Table structure for migrations
@@ -447,7 +498,7 @@ CREATE TABLE `migrations`  (
   `migration` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `batch` int NOT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 15 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 16 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of migrations
@@ -465,6 +516,7 @@ INSERT INTO `migrations` VALUES (10, '2025_07_02_152826_create_lila_table', 3);
 INSERT INTO `migrations` VALUES (11, '2025_07_02_152940_create_lingkar_kepala_table', 4);
 INSERT INTO `migrations` VALUES (13, '2025_07_02_231607_add_posyandu_to_orang_tua_and_balita', 5);
 INSERT INTO `migrations` VALUES (14, '2025_07_03_013858_add_posyandu_to_users_table', 6);
+INSERT INTO `migrations` VALUES (15, '2025_07_03_234547_add_lila_and_lingkarkepala_to_balita_table', 7);
 
 -- ----------------------------
 -- Table structure for orangtua
@@ -487,11 +539,12 @@ CREATE TABLE `orangtua`  (
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `id_user`(`id_user` ASC) USING BTREE,
   CONSTRAINT `orangtua_ibfk_1` FOREIGN KEY (`id_user`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT
-) ENGINE = InnoDB AUTO_INCREMENT = 110 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 111 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of orangtua
 -- ----------------------------
+INSERT INTO `orangtua` VALUES (110, 123, 'ivani', 'asraf', 'Laki-laki', NULL, NULL, '087861540874', '08786154535', 'sumbawa', 'Mawar', '2025-07-03 10:17:10', '2025-07-03 10:17:10');
 
 -- ----------------------------
 -- Table structure for rekapan
@@ -611,12 +664,13 @@ CREATE TABLE `user`  (
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `user_email_unique`(`email` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 123 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 126 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of user
 -- ----------------------------
 INSERT INTO `user` VALUES (1, 'ADMIN', 'admin@gmail.com', 'admin', NULL, NULL, 'admin123', NULL, NULL, '2021-07-06 15:00:41');
 INSERT INTO `user` VALUES (122, 'Kader Posyandu Mawar', 'kpmawar@gmail.com', 'kader', 'Mawar', NULL, '12345678', NULL, '2025-07-03 01:57:30', '2025-07-03 01:58:31');
+INSERT INTO `user` VALUES (123, 'bii', 'koprasi@gmail.com', 'orangtua', NULL, NULL, 'password', NULL, '2025-07-03 10:17:10', '2025-07-03 10:17:10');
 
 SET FOREIGN_KEY_CHECKS = 1;
